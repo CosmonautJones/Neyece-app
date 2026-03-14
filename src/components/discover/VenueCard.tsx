@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Venue } from "@/lib/supabase/types";
 
 interface VenueCardProps {
@@ -36,8 +37,9 @@ export default function VenueCard({ venue, score, featured }: VenueCardProps) {
   const displayTags = tags.slice(0, featured ? 3 : 2);
 
   return (
-    <div
-      className={`flex-shrink-0 bg-white border-2 border-ink rounded-2xl shadow-brutal overflow-hidden transition-all duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal-hover cursor-pointer ${
+    <Link
+      href={`/venue/${venue.id}`}
+      className={`flex-shrink-0 bg-white border-2 border-ink rounded-2xl shadow-brutal overflow-hidden transition-all duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal-hover cursor-pointer block ${
         featured ? "w-72" : "w-60"
       }`}
     >
@@ -106,6 +108,6 @@ export default function VenueCard({ venue, score, featured }: VenueCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

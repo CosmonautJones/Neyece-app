@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Venue } from "@/lib/supabase/types";
 
 interface VenueListItemProps {
@@ -34,7 +35,7 @@ export default function VenueListItem({ venue, score }: VenueListItemProps) {
   const topTag = tags[0];
 
   return (
-    <div className="flex items-center gap-3 bg-white border-2 border-ink rounded-xl shadow-brutal-sm p-3 transition-all duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal cursor-pointer">
+    <Link href={`/venue/${venue.id}`} className="flex items-center gap-3 bg-white border-2 border-ink rounded-xl shadow-brutal-sm p-3 transition-all duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal cursor-pointer">
       {/* Thumbnail */}
       <div className="flex-shrink-0 w-14 h-14 rounded-lg border-2 border-ink bg-gradient-to-br from-coral/20 to-yellow/20 flex items-center justify-center overflow-hidden">
         {venue.image_url ? (
@@ -79,6 +80,6 @@ export default function VenueListItem({ venue, score }: VenueListItemProps) {
           {score}
         </div>
       )}
-    </div>
+    </Link>
   );
 }
