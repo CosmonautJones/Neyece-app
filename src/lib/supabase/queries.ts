@@ -78,6 +78,32 @@ export async function getVenuesByCategory(client: Client, city: string, category
   return { venues: data ?? [], error };
 }
 
+export interface VenueQueryOptions {
+  city: string;
+  vibeTags?: string[];
+  limit?: number;
+  offset?: number;
+}
+
+export async function getVenuesFeed(client: Client, options: VenueQueryOptions) {
+  const { city, vibeTags, limit = 20, offset = 0 } = options;
+
+  let query = client
+    .from("venues")
+    .select("*", { count: "exact" })
+    .eq("city", city)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  // Filter by vibe tags if provided (venue must contain at least one matching tag)
+  if (vibeTags && vibeTags.length > 0) {
+    query = query.overlaps("vibe_tags", vibeTags);
+  }
+
+  const { data, error, count } = await query;
+  return { venues: data ?? [], count: count ?? 0, error };
+}
+
 export async function searchVenues(client: Client, city: string, query: string) {
   const { data, error } = await client
     .from("venues")
