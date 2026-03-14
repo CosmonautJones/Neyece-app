@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Neyece — That's Neyece.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;0,800;0,900;1,400;1,800&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --cream: #fef8f0;
+  --warm: #fff4e6;
+  --coral: #ff6b4a;
+  --coral2: #ff8c6e;
+  --orange: #ff9d3d;
+  --yellow: #ffd166;
+  --green: #06d6a0;
+  --ink: #1e1206;
+  --brown: #5c3d1e;
+  --muted: #a08060;
+  --soft: #f5e6d3;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--cream);
+  border-bottom: 2px solid var(--ink);
+  padding: 16px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--coral);
+  letter-spacing: -.01em;
+}
+.nav-links { display: flex; align-items: center; gap: 12px; }
+.nav-link {
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--brown);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 2px solid transparent;
+  transition: all .2s;
+}
+.nav-link:hover { border-color: var(--ink); }
+.nav-cta {
+  background: var(--coral);
+  color: #fff;
+  border-radius: 100px;
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  padding: 10px 22px;
+  text-decoration: none;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: all .15s;
+}
+.nav-cta:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink); }
+
+/* HERO */
+.hero {
+  padding: 80px 48px 60px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 48px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-left {}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -.02em;
+  margin-bottom: 24px;
+}
+h1 .italic { font-style: italic; color: var(--coral); }
+h1 .wavy {
+  display: inline-block;
+  position: relative;
+}
+h1 .wavy::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0; right: 0;
+  height: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'%3E%3Cpath d='M0 6 C10 0, 20 12, 30 6 C40 0, 50 12, 60 6 C70 0, 80 12, 90 6 C100 0, 110 12, 120 6' stroke='%23ff6b4a' stroke-width='3' fill='none'/%3E%3C/svg%3E") repeat-x;
+  background-size: 60px 6px;
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--brown);
+  max-width: 500px;
+  margin-bottom: 36px;
+}
+
+/* EMAIL FORM */
+.hero-form {
+  display: flex;
+  gap: 0;
+  max-width: 440px;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 var(--ink);
+  background: #fff;
+}
+.hero-form input {
+  flex: 1;
+  border: none;
+  padding: 15px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  outline: none;
+}
+.hero-form input::placeholder { color: #c4a882; }
+.hero-form button {
+  background: var(--coral);
+  color: #fff;
+  border: none;
+  border-left: 2px solid var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 15px 22px;
+  cursor: pointer;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.hero-form button:hover { background: var(--coral2); }
+
+.hero-note {
+  font-size: .75rem;
+  color: var(--muted);
+  margin-top: 14px;
+  font-weight: 700;
+}
+.hero-note span { color: var(--green); }
+
+.h-success {
+  display: none;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--coral);
+}
+
+/* HERO CARD (right side) */
+.hero-card {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 6px 6px 0 var(--ink);
+  position: relative;
+}
+.hc-img {
+  height: 200px;
+  background: linear-gradient(135deg, #ffb347, #ff6b4a, #c94040);
+  position: relative;
+  overflow: hidden;
+}
+.hc-img::before {
+  content: '🍷';
+  position: absolute;
+  font-size: 5rem;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.2));
+}
+.hc-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.3), transparent);
+}
+.hc-score {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-size: .7rem;
+  font-weight: 800;
+  color: var(--ink);
+  z-index: 2;
+}
+.hc-body { padding: 20px; }
+.hc-tag-row { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.hc-tag {
+  background: var(--soft);
+  border: 1.5px solid var(--ink);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: var(--brown);
+}
+.hc-tag.hot { background: var(--coral); color: #fff; border-color: var(--coral); }
+.hc-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.hc-meta { font-size: .78rem; color: var(--muted); font-weight: 700; margin-bottom: 14px; }
+.hc-insight {
+  background: var(--warm);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--brown);
+  border: 1.5px solid #eedad0;
+  margin-bottom: 14px;
+}
+.hc-insight strong { color: var(--coral); }
+.hc-btn {
+  width: 100%;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  cursor: default;
+}
+
+/* FLOATING STICKERS */
+.sticker {
+  position: absolute;
+  font-size: 2rem;
+  animation: float 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.sticker:nth-child(1) { top: 10%; right: 44%; animation-delay: 0s; }
+.sticker:nth-child(2) { top: 60%; left: 8%; animation-delay: 1.5s; font-size: 1.5rem; }
+.sticker:nth-child(3) { bottom: 15%; right: 10%; animation-delay: .8s; font-size: 1.8rem; }
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-12px) rotate(5deg); }
+}
+
+/* MARQUEE */
+.marquee-wrap {
+  background: var(--coral);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 48px 0 0;
+}
+.marquee-inner {
+  display: inline-flex;
+  gap: 0;
+  animation: scroll 22s linear infinite;
+}
+.marquee-item {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: #fff;
+  padding: 0 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.marquee-item .dot { color: var(--yellow); font-style: normal; font-size: 1.5rem; }
+@keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* SECTIONS */
+.section { max-width: 1160px; margin: 0 auto; padding: 80px 48px; }
+
+/* HOW IT WORKS */
+.how-header { text-align: center; margin-bottom: 56px; }
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  border: 2px solid var(--ink);
+  border-radius: 100px;
+  padding: 5px 16px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  box-shadow: 2px 2px 0 var(--ink);
+  color: var(--ink);
+}
+.section-kicker.orange { background: var(--orange); }
+.section-kicker.yellow { background: var(--yellow); }
+.section-kicker.coral { background: var(--coral); color: #fff; }
+
+h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+}
+h2 em { font-style: italic; color: var(--coral); }
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.how-card {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
+  position: relative;
+  overflow: hidden;
+}
+.how-card:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 var(--ink); }
+.how-card:nth-child(2) { background: var(--warm); }
+.how-card:nth-child(3) { background: var(--soft); }
+.how-emoji { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+.how-num {
+  position: absolute;
+  top: 16px; right: 20px;
+  font-family: 'Fraunces', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: rgba(0,0,0,.06);
+  line-height: 1;
+}
+.how-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.how-desc { font-size: .88rem; line-height: 1.75; color: var(--brown); font-weight: 600; }
+.how-badge {
+  display: inline-block;
+  margin-top: 16px;
+  background: var(--yellow);
+  border: 1.5px solid var(--ink);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+/* VS SECTION */
+.vs-wrap {
+  background: var(--soft);
+  border-radius: 32px;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.vs-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); margin-bottom: 20px; }
+.vs-desc { font-size: .95rem; line-height: 1.8; color: var(--brown); font-weight: 600; }
+.vs-cards { display: flex; flex-direction: column; gap: 14px; }
+.vc {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 18px 20px;
+  transition: transform .15s;
+}
+.vc:hover { transform: translateX(4px); }
+.vc-label {
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.vc.old .vc-label { color: #bbb; }
+.vc.nw .vc-label { color: var(--coral); }
+.vc-text { font-size: .9rem; font-weight: 700; line-height: 1.5; }
+.vc.old .vc-text { color: #bbb; text-decoration: line-through; }
+.vc.nw { background: linear-gradient(135deg, #fff8f0, #fff); box-shadow: 3px 3px 0 var(--coral); border-color: var(--coral); }
+.vc.nw .vc-text { color: var(--ink); }
+
+/* QUIZ */
+.quiz-wrap {
+  text-align: center;
+  background: var(--yellow);
+  border-radius: 32px;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 60px 48px;
+}
+.quiz-wrap h2 { margin-bottom: 8px; }
+.quiz-sub { font-size: 1rem; color: var(--brown); font-weight: 700; margin-bottom: 36px; }
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 680px;
+  margin: 0 auto 32px;
+}
+.pill {
+  padding: 10px 20px;
+  border: 2px solid var(--ink);
+  border-radius: 100px;
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .15s;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.pill:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--ink); }
+.pill.on { background: var(--coral); color: #fff; transform: translate(-2px,-2px); box-shadow: 4px 4px 0 var(--ink); }
+.quiz-result {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--coral);
+  min-height: 32px;
+  font-weight: 700;
+}
+
+/* PROOF */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+  margin-top: 48px;
+}
+.proof-card {
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
+}
+.proof-card:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 var(--ink); }
+.proof-card:nth-child(2) { background: var(--soft); }
+.proof-card:nth-child(3) { background: var(--warm); }
+.proof-stars { font-size: 1rem; margin-bottom: 12px; }
+.proof-q {
+  font-size: .9rem;
+  line-height: 1.7;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.proof-q .highlight { color: var(--coral); font-style: italic; }
+.proof-by { font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* CITIES */
+.cities-wrap {
+  background: var(--ink);
+  border-radius: 32px;
+  padding: 60px 48px;
+  text-align: center;
+  border: 2px solid var(--ink);
+  box-shadow: 6px 6px 0 #c94040;
+}
+.cities-wrap .section-kicker { background: var(--coral); color: #fff; border-color: rgba(255,255,255,.3); }
+.cities-wrap h2 { color: #fff; margin-bottom: 40px; }
+.cities-wrap h2 em { color: var(--yellow); }
+.cities-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.city-tag {
+  background: rgba(255,255,255,.08);
+  border: 2px solid rgba(255,255,255,.15);
+  border-radius: 100px;
+  padding: 12px 28px;
+  font-family: 'Fraunces', serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  font-weight: 700;
+  color: rgba(255,255,255,.9);
+  transition: all .2s;
+}
+.city-tag:hover { background: rgba(255,107,74,.2); border-color: var(--coral); }
+.city-soon {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-style: normal;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  align-self: center;
+}
+
+/* BOTTOM CTA */
+.cta-wrap {
+  text-align: center;
+  padding: 100px 48px;
+  position: relative;
+}
+.cta-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 20px;
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.cta-wrap h2 { font-size: clamp(2.5rem,6vw,5rem); margin-bottom: 16px; }
+.cta-sub {
+  font-size: 1.1rem;
+  color: var(--brown);
+  font-weight: 700;
+  margin-bottom: 48px;
+  font-style: italic;
+  font-family: 'Fraunces', serif;
+}
+.cta-form {
+  display: flex;
+  justify-content: center;
+  max-width: 440px;
+  margin: 0 auto;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 5px 5px 0 var(--ink);
+  background: #fff;
+}
+.cta-form input {
+  flex: 1;
+  border: none;
+  padding: 16px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  outline: none;
+  color: var(--ink);
+  background: transparent;
+}
+.cta-form input::placeholder { color: #c4a882; }
+.cta-form button {
+  background: var(--coral);
+  color: #fff;
+  border: none;
+  border-left: 2px solid var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 16px 22px;
+  cursor: pointer;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.cta-form button:hover { background: var(--coral2); }
+.cta-success {
+  display: none;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--coral);
+}
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,.6);
+  padding: 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .8rem;
+  font-weight: 700;
+}
+.f-logo {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--coral);
+}
+.f-tag { color: var(--yellow); font-style: italic; font-family: 'Fraunces', serif; }
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+@media(max-width:860px){
+  nav { padding: 16px 24px; }
+  .hero { grid-template-columns: 1fr; padding: 48px 24px 40px; }
+  .hero-card { display: none; }
+  .how-grid, .proof-grid { grid-template-columns: 1fr; }
+  .vs-wrap { grid-template-columns: 1fr; padding: 36px 24px; gap: 32px; }
+  .section { padding: 60px 24px; }
+  .quiz-wrap { padding: 40px 24px; }
+  .cities-wrap { padding: 40px 24px; }
+  footer { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* EYE HIGHLIGHT */
+.eye {
+  background: linear-gradient(135deg, #ff6b4a, #ffd166);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline;
+}
+/* For contexts where gradient text doesn't work (buttons etc) */
+.eye-solid {
+  color: #ffd166;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">N<span class="eye">eye</span>ce</div>
+  <div class="nav-links">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#cities" class="nav-link">Cities</a>
+    <a href="#cta" class="nav-cta">Join Waitlist 🎉</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="sticker">✨</div>
+  <div class="sticker">🗺</div>
+  <div class="sticker">🍜</div>
+
+  <div class="hero-left">
+    <div class="hero-kicker">🔥 Now taking early access</div>
+    <h1>
+      Find spots<br>that are<br>
+      <span class="italic wavy">actually</span><br>
+      <em>you.</em>
+    </h1>
+    <p class="hero-desc">
+      N<span class="eye">eye</span>ce learns your taste and finds the places that match your vibe —
+      not the crowd's. Hidden gems, local icons, and spots that make you go
+      <strong>"that's so N<span class="eye">eye</span>ce."</strong> 🙌
+    </p>
+
+    <div id="hf-wrap">
+      <div class="hero-form" id="hf">
+        <input type="email" id="h-email" placeholder="your@email.com"/>
+        <button onclick="signup('h')">Get Early Access</button>
+      </div>
+      <p class="h-success" id="h-ok">You're in! Something neyece is on its way 🎉</p>
+      <p class="hero-note" id="h-note">✦ No spam. <span>100% free</span> during beta.</p>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <div class="hc-img">
+      <div class="hc-score">✦ 94 N<span class="eye">eye</span>ce</div>
+    </div>
+    <div class="hc-body">
+      <div class="hc-tag-row">
+        <span class="hc-tag hot">🔥 Trending</span>
+        <span class="hc-tag">Hidden</span>
+        <span class="hc-tag">Candlelit</span>
+      </div>
+      <div class="hc-name">The Lower Room</div>
+      <div class="hc-meta">Wine Bar · West Village · 0.4 mi away</div>
+      <div class="hc-insight">
+        <strong>Why it's N<span class="eye">eye</span>ce for you:</strong> You love cozy, low-lit spots with great drinks and no attitude. This place has all three — plus a hidden entrance. 🕯
+      </div>
+      <button class="hc-btn">That's N<span class="eye-solid">eye</span>ce ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">That's N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">So N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Very N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Stay N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">That's N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">So N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Very N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Stay N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">That's N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">So N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Very N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+    <span class="marquee-item">Stay N<span class="eye">eye</span>ce <span class="dot">✦</span></span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" id="how">
+  <div class="how-header reveal">
+    <div class="section-kicker">⚡ How it works</div>
+    <h2>Three things no other<br>app does.</h2>
+  </div>
+  <div class="how-grid reveal">
+    <div class="how-card">
+      <span class="how-num">01</span>
+      <span class="how-emoji">🧠</span>
+      <div class="how-title">Your Vibe Fingerprint</div>
+      <div class="how-desc">We don't ask "what cuisine?" We ask "what's your ideal Saturday?" AI builds a taste profile that gets smarter every time you go out.</div>
+      <span class="how-badge">So N<span class="eye-solid">eye</span>ce</span>
+    </div>
+    <div class="how-card">
+      <span class="how-num">02</span>
+      <span class="how-emoji">👥</span>
+      <div class="how-title">Human + AI Curation</div>
+      <div class="how-desc">Local tastemakers drop real intel — not just stars, but the inside scoop. AI matches those gems to exactly the right people.</div>
+      <span class="how-badge">Very N<span class="eye-solid">eye</span>ce</span>
+    </div>
+    <div class="how-card">
+      <span class="how-num">03</span>
+      <span class="how-emoji">🕵️</span>
+      <div class="how-title">Discover First</div>
+      <div class="how-desc">Find the next great spot before it blows up. Be the friend who always knows where to go — before it gets a line around the block.</div>
+      <span class="how-badge">Stay N<span class="eye-solid">eye</span>ce</span>
+    </div>
+  </div>
+</div>
+
+<!-- VS -->
+<div class="section">
+  <div class="vs-wrap reveal">
+    <div>
+      <div class="section-kicker orange">😤 The Problem</div>
+      <h2 class="vs-title">Generic results<br>that miss the <em>vibe.</em></h2>
+      <p class="vs-desc">
+        Every app gives you what's popular near you. Sorted by people who aren't you.
+        N<span class="eye">eye</span>ce is the cool friend who knows exactly what you're into — and never steers you wrong. 🎯
+      </p>
+    </div>
+    <div class="vs-cards">
+      <div class="vc old">
+        <div class="vc-label">😩 Old Way</div>
+        <div class="vc-text">"Best restaurants near you" — 847 places sorted by strangers</div>
+      </div>
+      <div class="vc old">
+        <div class="vc-label">😩 Old Way</div>
+        <div class="vc-text">Generic filters. No vibe. No energy. No you.</div>
+      </div>
+      <div class="vc nw">
+        <div class="vc-label">✨ That's N<span class="eye">eye</span>ce</div>
+        <div class="vc-text">"4 spots picked for you tonight — because we know what you're in the mood for." 🙌</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="section">
+  <div class="quiz-wrap reveal">
+    <div class="section-kicker yellow">🎯 Your vibe check</div>
+    <h2>Your ideal evening feels like...</h2>
+    <p class="quiz-sub">Pick everything that sounds right 👇</p>
+    <div class="pills">
+      <button class="pill" onclick="tog(this)">🕯 Candlelit corner</button>
+      <button class="pill" onclick="tog(this)">🌆 Rooftop views</button>
+      <button class="pill" onclick="tog(this)">🤫 Only locals know</button>
+      <button class="pill" onclick="tog(this)">🎵 Live music</button>
+      <button class="pill" onclick="tog(this)">☀️ Natural light</button>
+      <button class="pill" onclick="tog(this)">⚡ No wait, no fuss</button>
+      <button class="pill" onclick="tog(this)">📖 A spot with a story</button>
+      <button class="pill" onclick="tog(this)">🍜 Order what they're known for</button>
+    </div>
+    <p class="quiz-result" id="qr"></p>
+  </div>
+</div>
+
+<!-- PROOF -->
+<div class="section">
+  <div class="how-header reveal">
+    <div class="section-kicker coral">💬 Early users say</div>
+    <h2>Already saying it.</h2>
+  </div>
+  <div class="proof-grid reveal">
+    <div class="proof-card">
+      <div class="proof-stars">⭐⭐⭐⭐⭐</div>
+      <p class="proof-q">"Found a wine bar 3 blocks away I'd walked past 200 times. Went twice that week. <span class="highlight">That's N<span class="eye">eye</span>ce.</span>"</p>
+      <div class="proof-by">— Beta user, Brooklyn NY</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-stars">⭐⭐⭐⭐⭐</div>
+      <p class="proof-q">"Recommended a tiny ramen spot I'd never heard of. Everything it told me about the vibe was right. <span class="highlight">So N<span class="eye">eye</span>ce.</span>"</p>
+      <div class="proof-by">— Beta user, Chicago IL</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-stars">⭐⭐⭐⭐⭐</div>
+      <p class="proof-q">"My friends don't get how I always know the best spot. I'm not telling them. <span class="highlight">Stay N<span class="eye">eye</span>ce.</span>"</p>
+      <div class="proof-by">— Beta user, Los Angeles CA</div>
+    </div>
+  </div>
+</div>
+
+<!-- CITIES -->
+<div class="section" id="cities">
+  <div class="cities-wrap reveal">
+    <div class="section-kicker">📍 Launching in</div>
+    <h2>Coming to your <em>city.</em></h2>
+    <div class="cities-row" style="margin-top:32px">
+      <div class="city-tag">New York</div>
+      <div class="city-tag">Los Angeles</div>
+      <div class="city-tag">Chicago</div>
+      <div class="city-tag">Miami</div>
+      <div class="city-tag city-soon">+ More soon</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="cta-wrap" id="cta">
+  <div class="reveal">
+    <span class="cta-emoji">🎉</span>
+    <div class="section-kicker" style="display:inline-flex;margin-bottom:20px;">✦ Early access</div>
+    <h2>Be first.<br>Be <em>N<span class="eye">eye</span>ce.</em></h2>
+    <p class="cta-sub">Join the waitlist. Help us build the thing your city deserves.</p>
+
+    <div id="cta-form-wrap">
+      <div class="cta-form" id="bf">
+        <input type="email" id="b-email" placeholder="your@email.com"/>
+        <button onclick="signup('b')">Join Waitlist 🎉</button>
+      </div>
+      <p class="cta-success" id="b-ok">You're in! Stay N<span class="eye">eye</span>ce. 🎉</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-logo">N<span class="eye">eye</span>ce</div>
+  <div class="f-tag">"That's N<span class="eye">eye</span>ce."</div>
+  <div>© 2026 N<span class="eye">eye</span>ce · All rights reserved</div>
+</footer>
+
+<script>
+// reveal on scroll
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') }), {threshold:.12})
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r))
+
+// signup
+function signup(p) {
+  const inp = document.getElementById(p + '-email')
+  if(!inp.value || !inp.value.includes('@')) { inp.style.outline = '2px solid #ff6b4a'; return }
+  if(p === 'h') {
+    document.getElementById('hf').style.display='none'
+    document.getElementById('h-ok').style.display='block'
+    document.getElementById('h-note').style.display='none'
+  } else {
+    document.getElementById('bf').style.display='none'
+    document.getElementById('b-ok').style.display='block'
+  }
+  console.log('signup:', inp.value)
+}
+document.querySelectorAll('input[type=email]').forEach(i => i.addEventListener('keydown', e => { if(e.key==='Enter') signup(i.id[0]) }))
+
+// quiz
+const vibeMap = [
+  {k:['candlelit','story'], r:"You're a hidden gem hunter. Neyece was made for you. 🕯"},
+  {k:['rooftop','natural'], r:"You chase beauty in the setting. We have spots that'll blow you away. 🌆"},
+  {k:['locals','fuss'], r:"You're an insider. You'll be our most powerful scout. 🤫"},
+  {k:['music','story'], r:"You want the full experience. Neyece finds the rooms that give it. 🎵"},
+]
+function tog(b) {
+  b.classList.toggle('on')
+  const on = [...document.querySelectorAll('.pill.on')].map(x => x.textContent.toLowerCase())
+  const r = document.getElementById('qr')
+  if(!on.length){ r.textContent=''; return }
+  for(const v of vibeMap) {
+    if(v.k.some(k => on.some(o => o.includes(k)))) { r.textContent = v.r; return }
+  }
+  r.textContent = "Your taste is specific. That's exactly why you need Neyece. 🎯"
+}
+</script>
+</body>
+</html>
