@@ -14,8 +14,8 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S0.1 Project Setup | 3 sessions | [ ] |
-| S0.2 Landing Page Live | 2 sessions | [ ] |
+| S0.1 Project Setup | 3 sessions | [~] |
+| S0.2 Landing Page Live | 2 sessions | [~] |
 
 **Exit Criteria:** Next.js app deployed to Vercel, DB connected, landing page collecting emails, analytics running.
 
@@ -26,7 +26,7 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S1.1 Auth + Onboarding | 3 sessions | [ ] |
+| S1.1 Auth + Onboarding | 3 sessions | [~] |
 | S1.2 Venue Database Seed | 2 sessions | [ ] |
 | S1.3 Discovery Feed | 3 sessions | [ ] |
 | S1.4 Venue Detail Screen | 2 sessions | [ ] |
