@@ -47,6 +47,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       venues: {
         Row: {
@@ -100,6 +101,7 @@ export interface Database {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       vibe_profiles: {
         Row: {
@@ -123,6 +125,14 @@ export interface Database {
           fingerprint_vector?: number[];
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "vibe_profiles_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       neyece_scores: {
         Row: {
@@ -146,6 +156,20 @@ export interface Database {
           score?: number;
           computed_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "neyece_scores_venue_id_fkey";
+            columns: ["venue_id"];
+            referencedRelation: "venues";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "neyece_scores_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       saved_spots: {
         Row: {
@@ -169,6 +193,20 @@ export interface Database {
           notes?: string | null;
           saved_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "saved_spots_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "saved_spots_venue_id_fkey";
+            columns: ["venue_id"];
+            referencedRelation: "venues";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       waitlist: {
         Row: {
@@ -192,8 +230,11 @@ export interface Database {
           converted?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
   };
 }
 

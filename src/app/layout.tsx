@@ -1,21 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-
-// Neyece brand fonts — swap to Google Fonts (Fraunces + Nunito) in production
-// when network is available. These variables are used in tailwind.config.ts
-// and can be overridden by adding the Google Fonts imports.
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "Neyece — Discover spots that match your vibe",
@@ -23,10 +7,16 @@ export const metadata: Metadata = {
     "Neyece replaces generic search results with vibe-matched recommendations. Find spots that actually get you.",
   openGraph: {
     title: "Neyece — That's Neyece.",
-    description: "Discover spots that match your vibe.",
+    description:
+      "Discover spots that match your vibe. Not the crowd's. AI-powered local discovery for people with taste.",
     siteName: "Neyece",
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Neyece — That's Neyece.",
+    description: "Discover spots that match your vibe.",
   },
 };
 
@@ -36,13 +26,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ fontFamily: "var(--font-geist-sans), sans-serif" }}
-      >
-        {children}
-      </body>
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="font-body antialiased">{children}</body>
     </html>
   );
 }
