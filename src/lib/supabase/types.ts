@@ -1,0 +1,206 @@
+/**
+ * Supabase Database types.
+ *
+ * In production, regenerate with:
+ *   npx supabase gen types typescript --project-id <project-id> > src/lib/supabase/types.ts
+ *
+ * These are manually defined to match our migration schema until
+ * we connect to a live Supabase project.
+ */
+
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+export interface Database {
+  public: {
+    Tables: {
+      users: {
+        Row: {
+          id: string;
+          clerk_id: string;
+          email: string;
+          name: string | null;
+          city: string | null;
+          vibe_profile: Json;
+          onboarded: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          clerk_id: string;
+          email: string;
+          name?: string | null;
+          city?: string | null;
+          vibe_profile?: Json;
+          onboarded?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          clerk_id?: string;
+          email?: string;
+          name?: string | null;
+          city?: string | null;
+          vibe_profile?: Json;
+          onboarded?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      venues: {
+        Row: {
+          id: string;
+          name: string;
+          neighborhood: string | null;
+          city: string;
+          lat: number | null;
+          lng: number | null;
+          category: string | null;
+          google_place_id: string | null;
+          vibe_tags: Json;
+          description: string | null;
+          image_url: string | null;
+          price_level: number | null;
+          hours: Json | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          neighborhood?: string | null;
+          city: string;
+          lat?: number | null;
+          lng?: number | null;
+          category?: string | null;
+          google_place_id?: string | null;
+          vibe_tags?: Json;
+          description?: string | null;
+          image_url?: string | null;
+          price_level?: number | null;
+          hours?: Json | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          neighborhood?: string | null;
+          city?: string;
+          lat?: number | null;
+          lng?: number | null;
+          category?: string | null;
+          google_place_id?: string | null;
+          vibe_tags?: Json;
+          description?: string | null;
+          image_url?: string | null;
+          price_level?: number | null;
+          hours?: Json | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      vibe_profiles: {
+        Row: {
+          id: string;
+          user_id: string;
+          answers: Json;
+          fingerprint_vector: number[];
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          answers?: Json;
+          fingerprint_vector?: number[];
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          answers?: Json;
+          fingerprint_vector?: number[];
+          updated_at?: string;
+        };
+      };
+      neyece_scores: {
+        Row: {
+          id: string;
+          venue_id: string;
+          user_id: string;
+          score: number;
+          computed_at: string;
+        };
+        Insert: {
+          id?: string;
+          venue_id: string;
+          user_id: string;
+          score: number;
+          computed_at?: string;
+        };
+        Update: {
+          id?: string;
+          venue_id?: string;
+          user_id?: string;
+          score?: number;
+          computed_at?: string;
+        };
+      };
+      saved_spots: {
+        Row: {
+          id: string;
+          user_id: string;
+          venue_id: string;
+          notes: string | null;
+          saved_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          venue_id: string;
+          notes?: string | null;
+          saved_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          venue_id?: string;
+          notes?: string | null;
+          saved_at?: string;
+        };
+      };
+      waitlist: {
+        Row: {
+          id: string;
+          email: string;
+          city: string | null;
+          converted: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          city?: string | null;
+          converted?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          city?: string | null;
+          converted?: boolean;
+          created_at?: string;
+        };
+      };
+    };
+  };
+}
+
+// Convenience type aliases
+export type User = Database["public"]["Tables"]["users"]["Row"];
+export type Venue = Database["public"]["Tables"]["venues"]["Row"];
+export type VibeProfile = Database["public"]["Tables"]["vibe_profiles"]["Row"];
+export type NeyeceScore = Database["public"]["Tables"]["neyece_scores"]["Row"];
+export type SavedSpot = Database["public"]["Tables"]["saved_spots"]["Row"];
+export type WaitlistEntry = Database["public"]["Tables"]["waitlist"]["Row"];
