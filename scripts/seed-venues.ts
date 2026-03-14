@@ -15,6 +15,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { CATEGORIES, CITIES, type CityConfig } from "./venue-taxonomy";
+import { autoTagVenue } from "./vibe-tags";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -83,6 +84,7 @@ interface VenueInsert {
   image_url: string | null;
   price_level: number | null;
   hours: string[] | null;
+  vibe_tags: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -152,19 +154,27 @@ async function searchPlaces(
   const data = await res.json();
   const places: PlaceResult[] = data.places ?? [];
 
-  return places.map((p) => ({
-    name: p.displayName?.text ?? "Unknown",
-    neighborhood: extractNeighborhood(p.formattedAddress ?? "", neighborhood),
-    city: city.id,
-    lat: p.location?.latitude ?? null,
-    lng: p.location?.longitude ?? null,
-    category,
-    google_place_id: p.id,
-    description: p.editorialSummary?.text ?? null,
-    image_url: p.photos?.[0] ? photoUrl(p.photos[0].name) : null,
-    price_level: parsePriceLevel(p.priceLevel),
-    hours: p.regularOpeningHours?.weekdayDescriptions ?? null,
-  }));
+  return places.map((p) => {
+    const name = p.displayName?.text ?? "Unknown";
+    const description = p.editorialSummary?.text ?? null;
+    const price_level = parsePriceLevel(p.priceLevel);
+    const vibe_tags = autoTagVenue({ name, category, description, price_level });
+
+    return {
+      name,
+      neighborhood: extractNeighborhood(p.formattedAddress ?? "", neighborhood),
+      city: city.id,
+      lat: p.location?.latitude ?? null,
+      lng: p.location?.longitude ?? null,
+      category,
+      google_place_id: p.id,
+      description,
+      image_url: p.photos?.[0] ? photoUrl(p.photos[0].name) : null,
+      price_level,
+      hours: p.regularOpeningHours?.weekdayDescriptions ?? null,
+      vibe_tags,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------

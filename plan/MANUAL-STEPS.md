@@ -20,6 +20,8 @@
   - [ ] `SUPABASE_SERVICE_ROLE_KEY`
 - [ ] Create Clerk JWT template in Supabase (for RLS with Clerk auth)
 
+> **Code ready:** Server client (`src/lib/supabase/server.ts`), queries, hooks, and server actions are all built. Just needs the project + keys.
+
 ---
 
 ## Clerk
@@ -37,6 +39,8 @@
   - [ ] Copy signing secret → `CLERK_WEBHOOK_SECRET` in `.env.local`
 - [ ] For local webhook testing: run `ngrok http 3000` and use ngrok URL
 
+> **Code ready:** ClerkProvider, middleware, sign-in/sign-up pages, webhook handler all built. Just needs the Clerk app + keys.
+
 ---
 
 ## Vercel
@@ -46,15 +50,7 @@
 - [ ] Verify production build deploys successfully
 - [ ] Set up custom domain (neyece.com) — DNS A/CNAME records
 
----
-
-## PostHog
-
-- [ ] Create PostHog project at [posthog.com](https://posthog.com)
-- [ ] Add to `.env.local`:
-  - [ ] `NEXT_PUBLIC_POSTHOG_KEY`
-  - [ ] `NEXT_PUBLIC_POSTHOG_HOST`
-- [ ] Install `posthog-js` and initialize in app (code TODO)
+> **Code ready:** Next.js build passes. CI workflow in GitHub Actions.
 
 ---
 
@@ -65,6 +61,21 @@
 - [ ] Create API key with Places API restriction
 - [ ] Add to `.env.local`:
   - [ ] `GOOGLE_PLACES_API_KEY`
+- [ ] Run venue seed: `npm run seed:nyc` (test NYC first)
+- [ ] Run full seed: `npm run seed` (all 4 cities)
+- [ ] Verify 500+ venues per city in Supabase
+
+> **Code ready:** Seed script (`scripts/seed-venues.ts`) and vibe tagger (`scripts/vibe-tags.ts`) are built. Auto-tags on ingestion. Just needs API key.
+
+---
+
+## PostHog
+
+- [ ] Create PostHog project at [posthog.com](https://posthog.com)
+- [ ] Add to `.env.local`:
+  - [ ] `NEXT_PUBLIC_POSTHOG_KEY`
+  - [ ] `NEXT_PUBLIC_POSTHOG_HOST`
+- [ ] Install `posthog-js` and initialize in app (code TODO)
 
 ---
 
@@ -95,4 +106,17 @@
 
 ---
 
-*Last updated: 2026-03-14 — S1.1 Session 1 complete*
+## Priority Order for First E2E Test
+
+To get the full onboarding flow working end-to-end, complete in this order:
+
+1. **Supabase** — create project, run migrations, get keys
+2. **Clerk** — create app, get keys, set up webhook
+3. **Google Places** — get API key, run `npm run seed:nyc`
+4. **Vercel** — deploy, add env vars
+
+After these 4, a user can: sign up → quiz → see discover page, with 500+ tagged NYC venues in the DB.
+
+---
+
+*Last updated: 2026-03-14 — S1.2 Session 2 complete*
