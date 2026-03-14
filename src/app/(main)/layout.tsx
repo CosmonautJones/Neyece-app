@@ -1,16 +1,21 @@
 import { getCurrentUser } from "@/lib/supabase/actions";
 import { redirect } from "next/navigation";
 
-export default async function OnboardingLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const user = await getCurrentUser();
 
-  // Already onboarded? Skip quiz and go to discover
-  if (user?.onboarded) {
-    redirect("/discover");
+  // Not signed in
+  if (!user) {
+    redirect("/sign-in");
+  }
+
+  // Not onboarded yet — send to quiz
+  if (!user.onboarded) {
+    redirect("/quiz");
   }
 
   return <>{children}</>;
