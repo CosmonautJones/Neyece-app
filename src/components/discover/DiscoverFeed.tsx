@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { Venue } from "@/lib/supabase/types";
-import { MOODS, MOCK_VENUES, MOCK_SCORES } from "@/lib/mock-data";
+import { MOODS, MOOD_TAG_MAP, MOCK_SCORES } from "@/lib/mock-data";
 import VenueCard from "./VenueCard";
 import VenueListItem from "./VenueListItem";
 import MoodSelector from "./MoodSelector";
@@ -24,15 +24,23 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
   const [mood, setMood] = useState("All");
   const [venues, setVenues] = useState<Venue[]>(initialVenues);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [offset, setOffset] = useState(0);
   const [useMock, setUseMock] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const fetchVenues = useCallback(
     async (selectedMood: string, newOffset: number, append: boolean) => {
       if (!city) return;
 
-      setLoading(true);
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
       try {
         const params = new URLSearchParams({
           city,
@@ -52,14 +60,13 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
           setHasMore(data.hasMore);
           setOffset(newOffset + data.venues.length);
         } else if (!append) {
-          // API returned empty — could be no Supabase connection yet, fall back to mock
           setUseMock(true);
         }
       } catch {
-        // API not available — stay on mock data
         setUseMock(true);
       } finally {
         setLoading(false);
+        setLoadingMore(false);
       }
     },
     [city]
@@ -71,6 +78,26 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Infinite scroll: observe sentinel element
+  useEffect(() => {
+    if (useMock || !hasMore) return;
+
+    const sentinel = loadMoreRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loadingMore && hasMore) {
+          fetchVenues(mood, offset, true);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [useMock, hasMore, loadingMore, mood, offset, fetchVenues]);
+
   // Handle mood change
   const handleMoodChange = (newMood: string) => {
     setMood(newMood);
@@ -78,6 +105,14 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
     if (!useMock) {
       fetchVenues(newMood, 0, false);
     }
+  };
+
+  // Pull to refresh
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    setOffset(0);
+    await fetchVenues(mood, 0, false);
+    setRefreshing(false);
   };
 
   // Mock-mode filtering
@@ -97,13 +132,26 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
   return (
     <div className="pb-24">
       {/* Header */}
-      <header className="px-5 pt-6 pb-4">
-        <p className="font-body text-muted text-sm">
-          Discovering in <span className="font-bold text-brown">{cityLabel}</span>
-        </p>
-        <h1 className="font-display text-2xl font-bold text-ink mt-0.5">
-          Hey, {userName ?? "friend"} 👋
-        </h1>
+      <header className="px-5 pt-6 pb-4 flex items-start justify-between">
+        <div>
+          <p className="font-body text-muted text-sm">
+            Discovering in <span className="font-bold text-brown">{cityLabel}</span>
+          </p>
+          <h1 className="font-display text-2xl font-bold text-ink mt-0.5">
+            Hey, {userName ?? "friend"} 👋
+          </h1>
+        </div>
+        <button
+          type="button"
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="mt-1 w-10 h-10 flex items-center justify-center rounded-full border-2 border-ink bg-white shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal transition-all disabled:opacity-50"
+          aria-label="Refresh feed"
+        >
+          <span className={`text-lg ${refreshing ? "animate-spin" : ""}`}>
+            🔄
+          </span>
+        </button>
       </header>
 
       {/* Mood selector */}
@@ -112,35 +160,37 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
       </div>
 
       {/* Featured section */}
-      <section className="mb-6">
-        <div className="px-5 mb-3 flex items-baseline justify-between">
-          <h2 className="font-display text-lg font-bold text-ink">For You Tonight</h2>
-          <span className="font-body text-xs text-muted">
-            {loading ? "..." : `${featured.length} spots`}
-          </span>
-        </div>
-        <div className="flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
-          {loading && venues.length === 0
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <VenueCardSkeleton key={i} featured />
-              ))
-            : featured.map((venue) => (
-                <VenueCard
-                  key={venue.id}
-                  venue={venue}
-                  score={MOCK_SCORES[venue.id]}
-                  featured
-                />
-              ))}
-        </div>
-      </section>
+      {(loading || featured.length > 0) && (
+        <section className="mb-6">
+          <div className="px-5 mb-3 flex items-baseline justify-between">
+            <h2 className="font-display text-lg font-bold text-ink">For You Tonight</h2>
+            <span className="font-body text-xs text-muted">
+              {loading && venues.length === 0 ? "..." : `${featured.length} spots`}
+            </span>
+          </div>
+          <div className="flex gap-3 overflow-x-auto px-5 pb-2 scrollbar-hide">
+            {loading && venues.length === 0
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <VenueCardSkeleton key={i} featured />
+                ))
+              : featured.map((venue) => (
+                  <VenueCard
+                    key={venue.id}
+                    venue={venue}
+                    score={MOCK_SCORES[venue.id]}
+                    featured
+                  />
+                ))}
+          </div>
+        </section>
+      )}
 
       {/* Nearby Gems */}
       <section className="px-5">
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="font-display text-lg font-bold text-ink">Nearby Gems</h2>
           <span className="font-body text-xs text-muted">
-            {loading ? "..." : `${nearby.length} spots`}
+            {loading && venues.length === 0 ? "..." : `${nearby.length} spots`}
           </span>
         </div>
 
@@ -155,15 +205,18 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
             {nearby.map((venue) => (
               <VenueListItem key={venue.id} venue={venue} score={MOCK_SCORES[venue.id]} />
             ))}
+
+            {/* Infinite scroll sentinel */}
             {hasMore && !useMock && (
-              <button
-                type="button"
-                onClick={() => fetchVenues(mood, offset, true)}
-                disabled={loading}
-                className="mt-2 py-3 bg-white border-2 border-ink rounded-xl font-body font-bold text-sm text-ink shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal transition-all disabled:opacity-50"
-              >
-                {loading ? "Loading..." : "Load more"}
-              </button>
+              <div ref={loadMoreRef} className="py-4 flex justify-center">
+                {loadingMore && (
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-coral rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <div className="w-2 h-2 bg-yellow rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <div className="w-2 h-2 bg-coral rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </div>
+                )}
+              </div>
             )}
           </div>
         ) : (
@@ -183,10 +236,8 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
 }
 
 // ---------------------------------------------------------------------------
-// Mock-mode mood filter (same logic as before, client-side)
+// Mock-mode mood filter
 // ---------------------------------------------------------------------------
-
-import { MOOD_TAG_MAP } from "@/lib/mock-data";
 
 function filterMockByMood(venues: Venue[], mood: string): Venue[] {
   const tagFilter = MOOD_TAG_MAP[mood] ?? [];
