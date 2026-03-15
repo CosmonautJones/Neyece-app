@@ -40,9 +40,9 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S2.1 Neyece Score Engine | 3 sessions | [ ] |
-| S2.2 AI Insight Generation | 2 sessions | [ ] |
-| S2.3 Vibe Learning Loop | 2 sessions | [ ] |
+| S2.1 Neyece Score Engine | 3 sessions | [x] |
+| S2.2 AI Insight Generation | 2 sessions | [x] |
+| S2.3 Vibe Learning Loop | 2 sessions | [x] |
 
 **Exit Criteria:** Feed sorted by real Neyece Scores. AI-generated insights per user+venue. Vibe profiles update from behavior.
 

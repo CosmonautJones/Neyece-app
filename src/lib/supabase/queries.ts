@@ -198,6 +198,25 @@ export async function upsertScore(
   return { score: data, error };
 }
 
+export async function upsertScoresBatch(
+  client: Client,
+  scores: Database["public"]["Tables"]["neyece_scores"]["Insert"][]
+) {
+  if (scores.length === 0) return { error: null };
+  const { error } = await client
+    .from("neyece_scores")
+    .upsert(scores, { onConflict: "venue_id,user_id" });
+  return { error };
+}
+
+export async function invalidateUserScores(client: Client, userId: string) {
+  const { error } = await client
+    .from("neyece_scores")
+    .delete()
+    .eq("user_id", userId);
+  return { error };
+}
+
 /**
  * Get featured venues (score 85-100) for a user.
  */
@@ -263,6 +282,63 @@ export async function unsaveSpot(client: Client, userId: string, venueId: string
     .eq("user_id", userId)
     .eq("venue_id", venueId);
   return { error };
+}
+
+// ============================================================
+// USER SIGNALS
+// ============================================================
+
+export async function recordSignal(
+  client: Client,
+  userId: string,
+  venueId: string,
+  signalType: "save" | "unsave" | "neyece" | "view" | "share"
+) {
+  const { error } = await client
+    .from("user_signals")
+    .insert({ user_id: userId, venue_id: venueId, signal_type: signalType });
+  return { error };
+}
+
+export async function getSignalCounts(
+  client: Client,
+  venueId: string
+) {
+  const { count: saves } = await client
+    .from("user_signals")
+    .select("*", { count: "exact", head: true })
+    .eq("venue_id", venueId)
+    .eq("signal_type", "save");
+
+  const { count: neyeces } = await client
+    .from("user_signals")
+    .select("*", { count: "exact", head: true })
+    .eq("venue_id", venueId)
+    .eq("signal_type", "neyece");
+
+  return { saves: saves ?? 0, neyeces: neyeces ?? 0 };
+}
+
+export async function getUserSignals(
+  client: Client,
+  userId: string,
+  options?: { limit?: number; since?: string }
+) {
+  let query = client
+    .from("user_signals")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (options?.since) {
+    query = query.gte("created_at", options.since);
+  }
+  if (options?.limit) {
+    query = query.limit(options.limit);
+  }
+
+  const { data, error } = await query;
+  return { signals: data ?? [], error };
 }
 
 // ============================================================

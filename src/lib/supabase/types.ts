@@ -208,6 +208,43 @@ export interface Database {
           },
         ];
       };
+      user_signals: {
+        Row: {
+          id: string;
+          user_id: string;
+          venue_id: string;
+          signal_type: "save" | "unsave" | "neyece" | "view" | "share";
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          venue_id: string;
+          signal_type: "save" | "unsave" | "neyece" | "view" | "share";
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          venue_id?: string;
+          signal_type?: "save" | "unsave" | "neyece" | "view" | "share";
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_signals_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_signals_venue_id_fkey";
+            columns: ["venue_id"];
+            referencedRelation: "venues";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       waitlist: {
         Row: {
           id: string;
@@ -244,4 +281,6 @@ export type Venue = Database["public"]["Tables"]["venues"]["Row"];
 export type VibeProfile = Database["public"]["Tables"]["vibe_profiles"]["Row"];
 export type NeyeceScore = Database["public"]["Tables"]["neyece_scores"]["Row"];
 export type SavedSpot = Database["public"]["Tables"]["saved_spots"]["Row"];
+export type UserSignal = Database["public"]["Tables"]["user_signals"]["Row"];
+export type SignalType = UserSignal["signal_type"];
 export type WaitlistEntry = Database["public"]["Tables"]["waitlist"]["Row"];

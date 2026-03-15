@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { Venue } from "@/lib/supabase/types";
+import { trackSignal } from "@/lib/track-signal";
+import VibeInsight from "./VibeInsight";
 
 interface VenueDetailProps {
   venue: Venue;
@@ -41,10 +43,16 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
   const emoji = CATEGORY_EMOJI[venue.category ?? ""] ?? "📍";
   const hours = (venue.hours as string[]) ?? [];
 
+  // Track venue view on mount
+  useEffect(() => {
+    trackSignal(venue.id, "view");
+  }, [venue.id]);
+
   const handleSave = async () => {
     setSavePending(true);
     const newSaved = !saved;
     setSaved(newSaved); // Optimistic
+    trackSignal(venue.id, newSaved ? "save" : "unsave");
 
     try {
       const res = await fetch(`/api/venues/${venue.id}/save`, {
@@ -61,6 +69,8 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
   };
 
   const handleShare = async () => {
+    trackSignal(venue.id, "share");
+
     const shareData = {
       title: `${venue.name} on Neyece`,
       text: `Just found ${venue.name} on Neyece. That's so Neyece.`,
@@ -74,7 +84,6 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
         // User cancelled — that's fine
       }
     } else {
-      // Fallback: copy to clipboard
       await navigator.clipboard.writeText(shareData.url);
       alert("Link copied!");
     }
@@ -82,7 +91,7 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
 
   const handleNeyece = () => {
     setNeyeceTapped(true);
-    // Future: POST to signals table
+    trackSignal(venue.id, "neyece");
   };
 
   return (
@@ -196,20 +205,12 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
         </div>
       )}
 
-      {/* AI Insight placeholder */}
+      {/* AI Insight (lazy-loaded, falls back to template) */}
       <div className="px-5 mb-5">
-        <div className="bg-gradient-to-br from-coral/10 to-yellow/10 border-2 border-coral/30 rounded-2xl p-4">
-          <p className="font-body text-xs text-coral font-bold uppercase tracking-wide mb-1.5">
-            Why this is Neyece for you
-          </p>
-          <p className="font-body text-ink text-sm leading-relaxed">
-            This {venue.category ?? "spot"} in {venue.neighborhood ?? "the area"} matches your{" "}
-            {tags[0] ? getVibeTagLabel(tags[0]).toLowerCase() : "vibe"} energy.{" "}
-            {tags.length > 1
-              ? `Plus it's got ${getVibeTagLabel(tags[1]).toLowerCase()} vibes — right up your alley.`
-              : "Definitely worth checking out."}
-          </p>
-        </div>
+        <VibeInsight
+          venueId={venue.id}
+          fallbackInsight={`This ${venue.category ?? "spot"} in ${venue.neighborhood ?? "the area"} matches your ${tags[0] ? getVibeTagLabel(tags[0]).toLowerCase() : "vibe"} energy. ${tags.length > 1 ? `Plus it's got ${getVibeTagLabel(tags[1]).toLowerCase()} vibes — right up your alley.` : "Definitely worth checking out."}`}
+        />
       </div>
 
       {/* Hours */}

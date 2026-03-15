@@ -4,4 +4,5 @@ export { default as BottomNav } from "./BottomNav";
 export { default as MoodSelector } from "./MoodSelector";
 export { default as DiscoverFeed } from "./DiscoverFeed";
 export { default as VenueDetail } from "./VenueDetail";
+export { default as VibeInsight } from "./VibeInsight";
 export { VenueCardSkeleton, VenueListItemSkeleton, FeedSkeleton } from "./Skeleton";

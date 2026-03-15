@@ -4,7 +4,7 @@ import type { QuizAnswers } from "./quiz-data";
  * All vibe dimensions used in the fingerprint vector.
  * Order matters — this defines the vector index for each trait.
  */
-const DIMENSIONS = [
+export const DIMENSIONS = [
   // energy (4)
   "chill",
   "lively",

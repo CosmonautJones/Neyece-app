@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { Venue } from "@/lib/supabase/types";
-import { MOODS, MOOD_TAG_MAP, MOCK_SCORES } from "@/lib/mock-data";
+import { MOODS, MOOD_TAG_MAP } from "@/lib/mock-data";
 import VenueCard from "./VenueCard";
 import VenueListItem from "./VenueListItem";
 import MoodSelector from "./MoodSelector";
@@ -10,6 +10,7 @@ import { VenueCardSkeleton, VenueListItemSkeleton } from "./Skeleton";
 
 interface DiscoverFeedProps {
   venues: Venue[];
+  scores: Record<string, number>;
   userName: string | null;
   city: string | null;
 }
@@ -20,7 +21,7 @@ interface VenuesResponse {
   hasMore: boolean;
 }
 
-export default function DiscoverFeed({ venues: initialVenues, userName, city }: DiscoverFeedProps) {
+export default function DiscoverFeed({ venues: initialVenues, scores: initialScores, userName, city }: DiscoverFeedProps) {
   const [mood, setMood] = useState("All");
   const [venues, setVenues] = useState<Venue[]>(initialVenues);
   const [loading, setLoading] = useState(false);
@@ -120,11 +121,11 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
 
   // Split into featured (score >= 85) and nearby
   const featured = displayVenues
-    .filter((v) => (MOCK_SCORES[v.id] ?? 0) >= 85)
-    .sort((a, b) => (MOCK_SCORES[b.id] ?? 0) - (MOCK_SCORES[a.id] ?? 0));
+    .filter((v) => (initialScores[v.id] ?? 0) >= 85)
+    .sort((a, b) => (initialScores[b.id] ?? 0) - (initialScores[a.id] ?? 0));
 
   const nearby = displayVenues
-    .filter((v) => (MOCK_SCORES[v.id] ?? 0) < 85 || !MOCK_SCORES[v.id])
+    .filter((v) => (initialScores[v.id] ?? 0) < 85 || !initialScores[v.id])
     .sort((a, b) => (a.neighborhood ?? "").localeCompare(b.neighborhood ?? ""));
 
   const cityLabel = city ? city.charAt(0).toUpperCase() + city.slice(1) : "your city";
@@ -177,7 +178,7 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
                   <VenueCard
                     key={venue.id}
                     venue={venue}
-                    score={MOCK_SCORES[venue.id]}
+                    score={initialScores[venue.id]}
                     featured
                   />
                 ))}
@@ -203,7 +204,7 @@ export default function DiscoverFeed({ venues: initialVenues, userName, city }: 
         ) : nearby.length > 0 ? (
           <div className="flex flex-col gap-3">
             {nearby.map((venue) => (
-              <VenueListItem key={venue.id} venue={venue} score={MOCK_SCORES[venue.id]} />
+              <VenueListItem key={venue.id} venue={venue} score={initialScores[venue.id]} />
             ))}
 
             {/* Infinite scroll sentinel */}
