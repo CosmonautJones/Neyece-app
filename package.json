@@ -8,14 +8,22 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
+    "seed": "tsx scripts/seed-venues.ts",
+    "seed:nyc": "tsx scripts/seed-venues.ts --city nyc",
+    "seed:dry": "tsx scripts/seed-venues.ts --dry-run",
+    "tag": "tsx scripts/assign-vibe-tags.ts",
+    "tag:nyc": "tsx scripts/assign-vibe-tags.ts --city nyc",
+    "tag:dry": "tsx scripts/assign-vibe-tags.ts --dry-run"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@clerk/nextjs": "^5.7.5",
     "@supabase/supabase-js": "^2.99.1",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
+    "svix": "^1.88.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -28,6 +36,7 @@
     "postcss": "^8",
     "prettier": "^3.8.1",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

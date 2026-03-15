@@ -1,0 +1,14 @@
+export { default as Navbar } from "./Navbar";
+export { default as Hero } from "./Hero";
+export { default as Marquee } from "./Marquee";
+export { default as HowItWorks } from "./HowItWorks";
+export { default as ProblemSolution } from "./ProblemSolution";
+export { default as QuizPreview } from "./QuizPreview";
+export { default as SocialProof } from "./SocialProof";
+export { default as CityShowcase } from "./CityShowcase";
+export { default as BottomCta } from "./BottomCta";
+export { default as Footer } from "./Footer";
+export { default as RevealOnScroll } from "./RevealOnScroll";
+export { default as NeyeceLogo } from "./NeyeceLogo";
+export { default as SectionKicker } from "./SectionKicker";
+export { default as WaitlistForm } from "./WaitlistForm";

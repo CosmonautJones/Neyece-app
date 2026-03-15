@@ -14,8 +14,8 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S0.1 Project Setup | 3 sessions | [ ] |
-| S0.2 Landing Page Live | 2 sessions | [ ] |
+| S0.1 Project Setup | 3 sessions | [~] |
+| S0.2 Landing Page Live | 2 sessions | [~] |
 
 **Exit Criteria:** Next.js app deployed to Vercel, DB connected, landing page collecting emails, analytics running.
 
@@ -26,10 +26,10 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S1.1 Auth + Onboarding | 3 sessions | [ ] |
-| S1.2 Venue Database Seed | 2 sessions | [ ] |
-| S1.3 Discovery Feed | 3 sessions | [ ] |
-| S1.4 Venue Detail Screen | 2 sessions | [ ] |
+| S1.1 Auth + Onboarding | 3 sessions | [x] |
+| S1.2 Venue Database Seed | 2 sessions | [x] |
+| S1.3 Discovery Feed | 3 sessions | [x] |
+| S1.4 Venue Detail Screen | 2 sessions | [x] |
 
 **Exit Criteria:** New user can sign up, complete onboarding, see personalized feed. 200+ venues per city. Save + share working.
 
@@ -40,9 +40,9 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S2.1 Neyece Score Engine | 3 sessions | [ ] |
-| S2.2 AI Insight Generation | 2 sessions | [ ] |
-| S2.3 Vibe Learning Loop | 2 sessions | [ ] |
+| S2.1 Neyece Score Engine | 3 sessions | [x] |
+| S2.2 AI Insight Generation | 2 sessions | [x] |
+| S2.3 Vibe Learning Loop | 2 sessions | [x] |
 
 **Exit Criteria:** Feed sorted by real Neyece Scores. AI-generated insights per user+venue. Vibe profiles update from behavior.
 
