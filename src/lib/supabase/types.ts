@@ -20,6 +20,9 @@ export interface Database {
           email: string;
           name: string | null;
           city: string | null;
+          avatar_url: string | null;
+          username: string | null;
+          profile_public: boolean;
           vibe_profile: Json;
           onboarded: boolean;
           created_at: string;
@@ -31,6 +34,9 @@ export interface Database {
           email: string;
           name?: string | null;
           city?: string | null;
+          avatar_url?: string | null;
+          username?: string | null;
+          profile_public?: boolean;
           vibe_profile?: Json;
           onboarded?: boolean;
           created_at?: string;
@@ -42,6 +48,9 @@ export interface Database {
           email?: string;
           name?: string | null;
           city?: string | null;
+          avatar_url?: string | null;
+          username?: string | null;
+          profile_public?: boolean;
           vibe_profile?: Json;
           onboarded?: boolean;
           created_at?: string;
@@ -245,6 +254,182 @@ export interface Database {
           },
         ];
       };
+      collections: {
+        Row: {
+          id: string;
+          user_id: string;
+          name: string;
+          description: string | null;
+          cover_image: string | null;
+          is_public: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          name: string;
+          description?: string | null;
+          cover_image?: string | null;
+          is_public?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          name?: string;
+          description?: string | null;
+          cover_image?: string | null;
+          is_public?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "collections_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      collection_venues: {
+        Row: {
+          id: string;
+          collection_id: string;
+          venue_id: string;
+          notes: string | null;
+          added_at: string;
+        };
+        Insert: {
+          id?: string;
+          collection_id: string;
+          venue_id: string;
+          notes?: string | null;
+          added_at?: string;
+        };
+        Update: {
+          id?: string;
+          collection_id?: string;
+          venue_id?: string;
+          notes?: string | null;
+          added_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "collection_venues_collection_id_fkey";
+            columns: ["collection_id"];
+            referencedRelation: "collections";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "collection_venues_venue_id_fkey";
+            columns: ["venue_id"];
+            referencedRelation: "venues";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      shares: {
+        Row: {
+          id: string;
+          user_id: string;
+          venue_id: string | null;
+          collection_id: string | null;
+          share_type: "venue" | "collection" | "profile";
+          platform: string | null;
+          referral_code: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          venue_id?: string | null;
+          collection_id?: string | null;
+          share_type: "venue" | "collection" | "profile";
+          platform?: string | null;
+          referral_code: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          venue_id?: string | null;
+          collection_id?: string | null;
+          share_type?: "venue" | "collection" | "profile";
+          platform?: string | null;
+          referral_code?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "shares_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      streaks: {
+        Row: {
+          user_id: string;
+          current_streak: number;
+          longest_streak: number;
+          last_active_week: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          current_streak?: number;
+          longest_streak?: number;
+          last_active_week?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          current_streak?: number;
+          longest_streak?: number;
+          last_active_week?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "streaks_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      achievements: {
+        Row: {
+          id: string;
+          user_id: string;
+          achievement_type: string;
+          unlocked_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          achievement_type: string;
+          unlocked_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          achievement_type?: string;
+          unlocked_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "achievements_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       waitlist: {
         Row: {
           id: string;
@@ -283,4 +468,9 @@ export type NeyeceScore = Database["public"]["Tables"]["neyece_scores"]["Row"];
 export type SavedSpot = Database["public"]["Tables"]["saved_spots"]["Row"];
 export type UserSignal = Database["public"]["Tables"]["user_signals"]["Row"];
 export type SignalType = UserSignal["signal_type"];
+export type Collection = Database["public"]["Tables"]["collections"]["Row"];
+export type CollectionVenue = Database["public"]["Tables"]["collection_venues"]["Row"];
+export type Share = Database["public"]["Tables"]["shares"]["Row"];
+export type Streak = Database["public"]["Tables"]["streaks"]["Row"];
+export type Achievement = Database["public"]["Tables"]["achievements"]["Row"];
 export type WaitlistEntry = Database["public"]["Tables"]["waitlist"]["Row"];

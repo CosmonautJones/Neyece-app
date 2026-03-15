@@ -42,6 +42,16 @@ export async function updateUser(
   return { user: data, error };
 }
 
+export async function getUserByUsername(client: Client, username: string) {
+  const { data, error } = await client
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .eq("profile_public", true)
+    .single();
+  return { user: data, error };
+}
+
 // ============================================================
 // VENUES
 // ============================================================
@@ -339,6 +349,145 @@ export async function getUserSignals(
 
   const { data, error } = await query;
   return { signals: data ?? [], error };
+}
+
+// ============================================================
+// STREAKS & ACHIEVEMENTS
+// ============================================================
+
+export async function getStreak(client: Client, userId: string) {
+  const { data, error } = await client
+    .from("streaks")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+  return { streak: data, error };
+}
+
+export async function upsertStreak(
+  client: Client,
+  streak: Database["public"]["Tables"]["streaks"]["Insert"]
+) {
+  const { data, error } = await client
+    .from("streaks")
+    .upsert(streak, { onConflict: "user_id" })
+    .select()
+    .single();
+  return { streak: data, error };
+}
+
+export async function getAchievements(client: Client, userId: string) {
+  const { data, error } = await client
+    .from("achievements")
+    .select("*")
+    .eq("user_id", userId)
+    .order("unlocked_at", { ascending: false });
+  return { achievements: data ?? [], error };
+}
+
+export async function unlockAchievement(
+  client: Client,
+  userId: string,
+  achievementType: string
+) {
+  const { data, error } = await client
+    .from("achievements")
+    .upsert(
+      { user_id: userId, achievement_type: achievementType },
+      { onConflict: "user_id,achievement_type" }
+    )
+    .select()
+    .single();
+  return { achievement: data, error };
+}
+
+// ============================================================
+// COLLECTIONS
+// ============================================================
+
+export async function getUserCollections(client: Client, userId: string) {
+  const { data, error } = await client
+    .from("collections")
+    .select("*, collection_venues(count)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  return { collections: data ?? [], error };
+}
+
+export async function getCollectionById(client: Client, id: string) {
+  const { data, error } = await client
+    .from("collections")
+    .select("*")
+    .eq("id", id)
+    .single();
+  return { collection: data, error };
+}
+
+export async function getCollectionVenues(client: Client, collectionId: string) {
+  const { data, error } = await client
+    .from("collection_venues")
+    .select("*, venues(*)")
+    .eq("collection_id", collectionId)
+    .order("added_at", { ascending: false });
+  return { items: data ?? [], error };
+}
+
+export async function createCollection(
+  client: Client,
+  collection: Database["public"]["Tables"]["collections"]["Insert"]
+) {
+  const { data, error } = await client
+    .from("collections")
+    .insert(collection)
+    .select()
+    .single();
+  return { collection: data, error };
+}
+
+export async function updateCollection(
+  client: Client,
+  id: string,
+  updates: Database["public"]["Tables"]["collections"]["Update"]
+) {
+  const { data, error } = await client
+    .from("collections")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+  return { collection: data, error };
+}
+
+export async function deleteCollection(client: Client, id: string) {
+  const { error } = await client.from("collections").delete().eq("id", id);
+  return { error };
+}
+
+export async function addToCollection(
+  client: Client,
+  collectionId: string,
+  venueId: string,
+  notes?: string
+) {
+  const { data, error } = await client
+    .from("collection_venues")
+    .insert({ collection_id: collectionId, venue_id: venueId, notes: notes ?? null })
+    .select()
+    .single();
+  return { item: data, error };
+}
+
+export async function removeFromCollection(
+  client: Client,
+  collectionId: string,
+  venueId: string
+) {
+  const { error } = await client
+    .from("collection_venues")
+    .delete()
+    .eq("collection_id", collectionId)
+    .eq("venue_id", venueId);
+  return { error };
 }
 
 // ============================================================

@@ -5,4 +5,5 @@ export { default as MoodSelector } from "./MoodSelector";
 export { default as DiscoverFeed } from "./DiscoverFeed";
 export { default as VenueDetail } from "./VenueDetail";
 export { default as VibeInsight } from "./VibeInsight";
+export { default as ShareSheet } from "./ShareSheet";
 export { VenueCardSkeleton, VenueListItemSkeleton, FeedSkeleton } from "./Skeleton";
