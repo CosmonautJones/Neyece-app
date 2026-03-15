@@ -7,6 +7,7 @@ import VenueCard from "./VenueCard";
 import VenueListItem from "./VenueListItem";
 import MoodSelector from "./MoodSelector";
 import { VenueCardSkeleton, VenueListItemSkeleton } from "./Skeleton";
+import StreakBadge from "./StreakBadge";
 
 interface DiscoverFeedProps {
   venues: Venue[];
@@ -142,17 +143,20 @@ export default function DiscoverFeed({ venues: initialVenues, scores: initialSco
             Hey, {userName ?? "friend"} 👋
           </h1>
         </div>
-        <button
-          type="button"
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="mt-1 w-10 h-10 flex items-center justify-center rounded-full border-2 border-ink bg-white shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal transition-all disabled:opacity-50"
-          aria-label="Refresh feed"
-        >
-          <span className={`text-lg ${refreshing ? "animate-spin" : ""}`}>
-            🔄
-          </span>
-        </button>
+        <div className="flex items-center gap-2 mt-1">
+          <StreakBadge />
+          <button
+            type="button"
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-ink bg-white shadow-brutal-sm hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brutal transition-all disabled:opacity-50"
+            aria-label="Refresh feed"
+          >
+            <span className={`text-lg ${refreshing ? "animate-spin" : ""}`}>
+              🔄
+            </span>
+          </button>
+        </div>
       </header>
 
       {/* Mood selector */}

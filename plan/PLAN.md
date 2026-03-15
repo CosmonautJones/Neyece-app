@@ -53,10 +53,10 @@
 
 | Sprint | Sessions | Status |
 |--------|----------|--------|
-| S3.1 User Profiles | 2 sessions | [ ] |
-| S3.2 Saved Spots + Collections | 2 sessions | [ ] |
-| S3.3 Share System | 2 sessions | [ ] |
-| S3.4 Gamification | 2 sessions | [ ] |
+| S3.1 User Profiles | 2 sessions | [x] |
+| S3.2 Saved Spots + Collections | 2 sessions | [x] |
+| S3.3 Share System | 2 sessions | [x] |
+| S3.4 Gamification | 2 sessions | [x] |
 
 **Exit Criteria:** Profiles live, collections shareable, OG image share cards working, streak system active.
 

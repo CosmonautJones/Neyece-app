@@ -1,85 +1,57 @@
-# Phase 2 → Phase 3 Handoff
+# Phase 3 → Phase 4 Handoff
 
-> Last updated: 2026-03-15 | Phase 2 complete | Branch: `claude/create-plan-repo-NQYZP`
-
----
-
-## What's Done (Phase 2: Intelligence)
-
-All 7 sessions shipped in one commit (f0dbd83). Build passes clean.
-
-### S2.1 — Neyece Score Engine
-| File | Purpose |
-|------|---------|
-| `src/lib/scoring.ts` | Pure math: cosine similarity, weighted formula (50/20/20/10) |
-| `src/lib/scoring-service.ts` | Server orchestration: bulk compute + 24h cache + single-venue lookup |
-| `src/app/api/scores/route.ts` | `GET /api/scores?city=nyc&mood=Chill` |
-| `src/lib/fingerprint.ts` | `DIMENSIONS` now exported |
-| `src/lib/supabase/queries.ts` | Added `upsertScoresBatch()`, `invalidateUserScores()` |
-| `src/components/discover/DiscoverFeed.tsx` | Accepts `scores` prop (removed `MOCK_SCORES` import) |
-| `src/app/(main)/discover/page.tsx` | Passes `scores` prop |
-
-### S2.2 — AI Insights
-| File | Purpose |
-|------|---------|
-| `src/lib/insights.ts` | Claude API (claude-sonnet-4-6) + template fallback |
-| `src/app/api/insights/[venueId]/route.ts` | `GET /api/insights/:venueId` (1h cache) |
-| `src/components/discover/VibeInsight.tsx` | Client component: template-first, lazy AI swap with fade |
-| `src/components/discover/VenueDetail.tsx` | Uses `<VibeInsight>` instead of static block |
-
-### S2.3 — Learning Loop
-| File | Purpose |
-|------|---------|
-| `supabase/migrations/00003_user_signals.sql` | `user_signals` table + RLS |
-| `src/lib/supabase/types.ts` | Added `UserSignal`, `SignalType` types |
-| `src/lib/supabase/queries.ts` | `recordSignal()`, `getSignalCounts()`, `getUserSignals()` |
-| `src/app/api/signals/route.ts` | `POST /api/signals` (Zod validated, fire-and-forget) |
-| `src/lib/track-signal.ts` | Client utility with `sendBeacon` for view/share |
-| `src/lib/vibe-learner.ts` | Vector drift: neyece=3x, save=2x, share=2x, view=0.5x |
-| `src/app/api/profile/drift/route.ts` | `POST /api/profile/drift` (compute + invalidate) |
-| `src/components/discover/VenueDetail.tsx` | Wired: view, save, unsave, neyece, share signals |
+> Last updated: 2026-03-15 | Phase 3 complete | Branch: `claude/create-plan-repo-NQYZP`
 
 ---
 
-## Known TODOs Left Over
+## What's Done (Phase 3: Social Layer)
 
-1. **Real Supabase connection** — Discover page and venue detail still use `MOCK_VENUES` / `MOCK_SCORES` as data source. The scoring service is fully wired but needs a live DB to serve real scores. Swap happens when Supabase is connected.
-2. **Social signal in scores** — `computeScoresForUser()` passes `saveCount: 0, neyeceCount: 0` (line 70-71 in scoring-service.ts). The `getSignalCounts()` query exists but isn't called in the scoring loop yet to avoid N+1 queries on mock data. Wire it when going live.
-3. **Drift trigger on feed load** — The plan calls for checking `shouldUpdateProfile()` at the start of `computeScoresForUser()`. Not wired yet since it requires a live DB. Simple to add: import `shouldUpdateProfile` + `computeVectorDrift` and call before scoring.
-4. **ANTHROPIC_API_KEY** — Needs to be set in `.env.local` for AI insights. Without it, template fallback works silently.
+All 8 sessions shipped. Build passes clean with 27 routes.
 
----
+### S3.1 — User Profiles
+- Profile page at `/profile`: editable header, vibe summary (tag pills + bars), discovery stats (2x2 grid)
+- Public profiles at `/profile/[username]`: read-only with OG metadata
+- Profile settings: username editing, public toggle, sign out
+- Migration: `avatar_url`, `username`, `profile_public` on users table
+- API: `GET /api/profile`, `PATCH /api/profile/settings`
 
-## What's Next (Phase 3: Social Layer)
+### S3.2 — Saved Spots + Collections
+- Saved spots page at `/saved`: 2-column grid, sort by recent/score/neighborhood, optimistic unsave
+- Collections system: full CRUD API, `collections` + `collection_venues` tables
+- Public collection support (is_public flag)
+- API: `GET /api/saved`, full `/api/collections/` CRUD suite
 
-8 sessions across 4 sprints. Detailed plans in `plan/phase-3/`.
+### S3.3 — Share System
+- `ShareSheet` bottom sheet component: copy link, Twitter, WhatsApp, native share
+- `shares` table with referral code + platform tracking
+- `POST /api/shares`: logs shares with auto-generated referral codes
+- #SoNeyece hashtag auto-appended
+- Slide-up/fade-in animations in globals.css
 
-| Sprint | Sessions | What |
-|--------|----------|------|
-| S3.1 User Profiles | 2 | Profile page, public profiles, OG images, account settings |
-| S3.2 Saved Spots + Collections | 2 | Saved grid, collections CRUD, add-to-collection flow |
-| S3.3 Share System | 2 | `@vercel/og` share cards, share bottom sheet, referral tracking |
-| S3.4 Gamification | 2 | Streaks, 6 achievements, 4-tier system, badges |
-
-### New DB tables needed
-- `collections` (id, user_id, name, description, cover_image)
-- `collection_venues` (collection_id, venue_id, added_at, notes)
-- `streaks` (user_id, current_streak, longest_streak, last_active_week)
-- `achievements` (id, user_id, achievement_type, unlocked_at)
-- `shares` (id, user_id, venue_id, platform, referral_code)
-- `users` table updates: avatar_url, username, profile_visibility
-
-### Suggested start order
-1. **S3.1 Session 1** (Profile page) — foundational, everything else hangs off it
-2. **S3.2 Session 1** (Saved Spots grid) — uses existing `saved_spots` table
-3. **S3.1 Session 2** (Public profiles) — enables sharing
-4. **S3.3** (Share system) — needs public profiles to share
-5. **S3.2 Session 2** (Collections) — nice-to-have, can parallelize
-6. **S3.4** (Gamification) — depends on signals from Phase 2
+### S3.4 — Gamification
+- `gamification.ts`: pure logic for streaks, achievements, tiers
+- 6 achievements: First Neyece, Explorer, Scout, Insider, Tastemaker, Legend
+- 4 tiers: Regular → Scout (50pts) → Tastemaker (200pts) → Legend (500pts)
+- Streak tracking with ISO week logic
+- `Gamification` profile component with streak counter, tier badge, progress bar, achievements grid
+- `StreakBadge` on discover feed header
+- API: `GET /api/gamification`
 
 ---
 
-## API Routes (14 total)
+## New DB Tables (Phase 3)
+
+| Migration | Tables |
+|-----------|--------|
+| 00004 | users.avatar_url |
+| 00005 | users.username, users.profile_public |
+| 00006 | collections, collection_venues |
+| 00007 | shares |
+| 00008 | streaks, achievements |
+
+---
+
+## API Routes (27 total)
 
 ```
 Auth:
@@ -102,7 +74,21 @@ Signals:
   POST /api/signals
 
 Profile:
+  GET  /api/profile
   POST /api/profile/drift
+  PATCH /api/profile/settings
+
+Saved + Collections:
+  GET  /api/saved
+  GET/POST /api/collections
+  GET/PATCH/DELETE /api/collections/:id
+  POST/DELETE /api/collections/:id/venues
+
+Shares:
+  POST /api/shares
+
+Gamification:
+  GET  /api/gamification
 
 Waitlist:
   POST /api/waitlist
@@ -110,9 +96,29 @@ Waitlist:
 
 ---
 
+## What's Next (Phase 4: Launch)
+
+5 sessions across 3 sprints. See `plan/phase-4/` for details.
+
+| Sprint | Sessions | What |
+|--------|----------|------|
+| S4.1 QA + Performance | 2 | Lighthouse audit, bundle size, loading states, error boundaries |
+| S4.2 Waitlist Onboarding | 2 | Email flows, waitlist → user conversion, welcome sequence |
+| S4.3 Go Live | 1 | Production deploy, monitoring, ProductHunt prep |
+
+### Key pre-launch tasks
+1. **Connect real Supabase** — swap MOCK_VENUES/MOCK_SCORES with real DB queries
+2. **Run migrations** — 8 migration files ready to apply
+3. **Set env vars** — ANTHROPIC_API_KEY for AI insights
+4. **Seed real venues** — Google Places API + Foursquare for NYC
+5. **Performance audit** — Lighthouse, bundle analysis, image optimization
+6. **Error boundaries** — wrap all client components
+7. **PostHog analytics** — track key events (quiz completion, save, neyece, share)
+
+---
+
 ## Build Verification
 
 ```bash
-npx next build   # clean, all 14 routes compile
-npx tsx src/lib/scoring.ts   # sanity: cosine sim 0.577, score 75
+npx next build   # 27 routes, all clean
 ```

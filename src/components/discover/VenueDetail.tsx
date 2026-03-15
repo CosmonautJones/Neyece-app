@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Venue } from "@/lib/supabase/types";
 import { trackSignal } from "@/lib/track-signal";
 import VibeInsight from "./VibeInsight";
+import ShareSheet from "./ShareSheet";
 
 interface VenueDetailProps {
   venue: Venue;
@@ -38,6 +39,7 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
   const [saved, setSaved] = useState(initialSaved);
   const [savePending, setSavePending] = useState(false);
   const [neyeceTapped, setNeyeceTapped] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   const tags = (venue.vibe_tags as string[]) ?? [];
   const emoji = CATEGORY_EMOJI[venue.category ?? ""] ?? "📍";
@@ -68,25 +70,9 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
     }
   };
 
-  const handleShare = async () => {
+  const handleShare = () => {
     trackSignal(venue.id, "share");
-
-    const shareData = {
-      title: `${venue.name} on Neyece`,
-      text: `Just found ${venue.name} on Neyece. That's so Neyece.`,
-      url: `${window.location.origin}/venue/${venue.id}`,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        // User cancelled — that's fine
-      }
-    } else {
-      await navigator.clipboard.writeText(shareData.url);
-      alert("Link copied!");
-    }
+    setShareOpen(true);
   };
 
   const handleNeyece = () => {
@@ -242,6 +228,17 @@ export default function VenueDetail({ venue, score, initialSaved = false }: Venu
           {neyeceTapped ? "That's So Neyece ✨" : "That's Neyece 🔥"}
         </button>
       </div>
+
+      {/* Share Sheet */}
+      <ShareSheet
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={`${venue.name} on Neyece`}
+        text={`Just found ${venue.name} on Neyece. That's so Neyece.`}
+        url={typeof window !== "undefined" ? `${window.location.origin}/venue/${venue.id}` : ""}
+        shareType="venue"
+        venueId={venue.id}
+      />
     </div>
   );
 }

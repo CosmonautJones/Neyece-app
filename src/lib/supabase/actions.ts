@@ -23,7 +23,7 @@ export async function getCurrentUser(): Promise<User | null> {
 /**
  * Update the current user's profile (name, city, etc.).
  */
-export async function updateCurrentUser(updates: { name?: string; city?: string }) {
+export async function updateCurrentUser(updates: { name?: string; city?: string; avatar_url?: string }) {
   const user = await getCurrentUser();
   if (!user) return { error: "Not authenticated" };
 
